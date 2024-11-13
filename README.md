@@ -14,17 +14,17 @@ This project provides a control panel and circular progress bar primarily design
 - **Reset Function**: Quickly reset progress to zero.
 
 ## 🛠️ Requirements
-
+- **NPM**: Required for package installation (Can use any package manager) 
 - **Node.js**: Required for setting up a WebSocket server.
-- **WebSocket Server**: Configured to connect to `ws://localhost:3000`.
+- **WebSocket Server**: Required for live updates - install with "npm install ws"
 
 > **Note**: Ensure Node.js is installed on your system. If you’re setting up a WebSocket server locally, you may need to install additional WebSocket dependencies.
 
 ## 📥 Installation
 
 1. **Clone or Download** the repository.
-3. **Install necessary Node.js packages** ([How To Install NodeJS](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs))
-4. **Start the Websocket server** by running the included start.bat file, or running "node server.js"
+3. **Install Node.js and necessary packages** recommended to use npm to install. 
+4. **Start the Websocket server** by running the included start.bat file, or running >node server.js
 5. **Open control.html** in a browser to access the control panel.
 6. **Open progress.html** in a separate browser window or tab to view the progress bar.
 7. **Add progress.html location to OBS** as a browser source. Use the File Location as the "URL" (DO NOT ENABLE "LOCAL FILE" CHECKBOX).
