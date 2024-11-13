@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .form-container {
+            display: flex;
+            gap: 20px;
+        }
+        .form-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            flex: 3;
+        }
+        .adjust-buttons-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 20px;
+            flex: 1;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 220px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], input[type="color"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #4169e1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #3158d4;
+        }
+        .connection-status {
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .connected {
+            background: #d4edda;
+            color: #155724;
+        }
+        .disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .adjust-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .adjust-buttons button {
+            font-size: 20px;
+            width: 60px;
+            height: 60px;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <h2>Progress Bar Controls</h2>
+        <div class="form-container">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="toggle-title">
+                        <input type="checkbox" id="toggle-title" checked>
+                        Title:
+                    </label>
+                    <input type="text" id="title" value="PROGRESS">
+                </div>
+                <div class="form-group">
+                    <label for="current">Current Value:</label>
+                    <input type="number" id="current" value="50">
+                </div>
+                <div class="form-group">
+                    <label for="min">Minimum Value:</label>
+                    <input type="number" id="min" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="max">Maximum Value:</label>
+                    <input type="number" id="max" value="100">
+                </div>
+                <div class="form-group">
+                    <label for="color">Progress Color:</label>
+                    <input type="color" id="color" value="#4169e1" style="width: 100%; height: 50px;">
+                </div>
+                <div class="form-group">
+                    <label for="text-color">Text Color:</label>
+                    <input type="color" id="text-color" value="#ffffff" style="width: 100%; height: 50px;">
+                </div>
+            </div>
+            <div class="adjust-buttons-container">
+                <div class="adjust-buttons">
+                    <button onclick="adjustValue(1)">+</button>
+                    <button onclick="adjustValue(-1)">-</button>
+                </div>
+            </div>
+        </div>
+        <button onclick="resetProgress()">Reset Progress</button>
+        <div id="status" class="connection-status">Connecting...</div>
+    </div>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:3000');
+        const status = document.getElementById('status');
+    
+        // Update connection status
+        ws.onopen = () => {
+            status.textContent = 'Connected';
+            status.className = 'connection-status connected';
+        };
+    
+        ws.onclose = () => {
+            status.textContent = 'Disconnected - Refresh to reconnect';
+            status.className = 'connection-status disconnected';
+        };
+    
+        // Function to send data to progress page
+        function sendData() {
+            const data = {
+                title: document.getElementById('title').value,
+                current: Number(document.getElementById('current').value),
+                min: Number(document.getElementById('min').value),
+                max: Number(document.getElementById('max').value),
+                showTitle: document.getElementById('toggle-title').checked,
+                color: document.getElementById('color').value,
+                textColor: document.getElementById('text-color').value // New text color field
+            };
+            ws.send(JSON.stringify(data));
+        }
+    
+        // Add event listeners to each input to send data on change
+        document.getElementById('title').addEventListener('input', sendData);
+        document.getElementById('current').addEventListener('input', sendData);
+        document.getElementById('min').addEventListener('input', sendData);
+        document.getElementById('max').addEventListener('input', sendData);
+        document.getElementById('toggle-title').addEventListener('change', sendData);
+        document.getElementById('color').addEventListener('input', sendData);
+        document.getElementById('text-color').addEventListener('input', sendData);
+    
+        // Handle incoming WebSocket messages to set initial values if needed
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            document.getElementById('title').value = data.title;
+            document.getElementById('current').value = data.current;
+            document.getElementById('min').value = data.min;
+            document.getElementById('max').value = data.max;
+        };
+    
+        // Function to adjust current value
+        function adjustValue(amount) {
+            const currentElement = document.getElementById('current');
+            let currentValue = Number(currentElement.value);
+            currentValue += amount;
+            const min = Number(document.getElementById('min').value);
+            const max = Number(document.getElementById('max').value);
+            if (currentValue >= min && currentValue <= max) {
+                currentElement.value = currentValue;
+                sendData();
+            }
+        }
+
+        // Function to reset progress
+        function resetProgress() {
+            document.getElementById('current').value = 0;
+            sendData();
+        }
+    </script>
+    
+</body>
+</html>

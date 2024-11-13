@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: transparent;
+        }
+        .progress-container {
+            width: 90vw;
+            max-width: 300px;
+            height: auto;
+            aspect-ratio: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .title {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: -40px;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: Arial, sans-serif;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .progress-circle {
+            transform: rotate(-90deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="title">PROGRESS</div>
+        <svg class="progress-circle" width="300" height="300">
+            <!-- Background circle -->
+            <circle cx="150" cy="150" r="140" stroke="#ddd" stroke-width="20" fill="none"/>
+            <!-- Progress circle with solid color -->
+            <circle id="progress" cx="150" cy="150" r="140" stroke="#4169e1" stroke-width="20" fill="none"/>
+        </svg>
+        <div class="percentage">0%</div>
+    </div>
+
+    <script>
+        const circle = document.querySelector('#progress');
+        const radius = circle.r.baseVal.value;
+        const circumference = 2 * Math.PI * radius;
+        
+        circle.style.strokeDasharray = `${circumference} ${circumference}`;
+        circle.style.strokeDashoffset = circumference;
+
+        function setProgress(percent) {
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            circle.style.transition = 'stroke-dashoffset 0.5s ease-in-out';
+        }
+
+        // WebSocket Connection
+        const ws = new WebSocket('ws://localhost:3000');
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            
+            // Update title visibility
+            const titleElement = document.querySelector('.title');
+            titleElement.style.display = data.showTitle ? 'block' : 'none';
+            titleElement.textContent = data.title;
+
+            // Update color of progress circle
+            circle.setAttribute('stroke', data.color || '#4169e1');
+
+            // Update text color of title and percentage
+            titleElement.style.color = data.textColor || '#ffffff';
+            document.querySelector('.percentage').style.color = data.textColor || '#ffffff';
+
+            // Calculate and update percentage
+            const range = data.max - data.min;
+            const percentage = Math.round(((data.current - data.min) / range) * 100);
+            document.querySelector('.percentage').textContent = `${percentage}%`;
+
+            // Update progress circle with the percentage
+            setProgress(percentage);
+        };
+
+        ws.onclose = () => {
+            console.log('Connection closed, attempting to reconnect...');
+            setTimeout(() => {
+                window.location.reload();
+            }, 5000);
+        };
+    </script>
+</body>
+</html>
