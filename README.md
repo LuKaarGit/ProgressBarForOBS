@@ -23,7 +23,7 @@ This project provides a control panel and circular progress bar primarily design
 ## 📥 Installation
 
 1. **Clone or Download** the repository.
-3. **Install necessary Node.js packages** (if setting up a WebSocket server locally).
+3. **Install necessary Node.js packages** ([How To Install NodeJS](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs))
 4. **Start the Websocket server** by running the included start.bat file, or running "node server.js"
 5. **Open control.html** in a browser to access the control panel.
 6. **Open progress.html** in a separate browser window or tab to view the progress bar.
