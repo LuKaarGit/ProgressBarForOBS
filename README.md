@@ -1,6 +1,6 @@
 # 🕹️ Progress Bar Control Panel
 
-This project provides a real-time control panel for a circular progress bar, updating live via WebSocket. It allows you to adjust settings like title visibility, progress values, color themes, and more. The instructions below detail setup, usage, and available options.
+This project provides a control panel and circular progress bar primarily designed for use as an OBS Browser Source. The script runs via websocket so changes are updated immediately. It allows you to adjust settings like title visibility, progress values, color themes, and more. The instructions below detail setup, usage, and available options.
 
 ![Example Screenshot](screenshot.png)
 
