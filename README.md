@@ -33,9 +33,6 @@ This project provides a control panel and circular progress bar primarily design
 
 ⚙️ Control Panel Options
 ------------------------
-
-In the control.html Panel:
-
 *   **Title**:
     
     *   Toggle title visibility with the checkbox next to "Title."
