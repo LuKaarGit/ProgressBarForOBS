@@ -2,6 +2,8 @@
 
 This project provides a real-time control panel for a circular progress bar, updating live via WebSocket. It allows you to adjust settings like title visibility, progress values, color themes, and more. The instructions below detail setup, usage, and available options.
 
+![Example Screenshot](screenshot.png)
+
 ## ✨ Features
 
 - **Adjustable Title**: Toggle the title visibility and customize the displayed text.
