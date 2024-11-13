@@ -56,11 +56,6 @@ This project provides a control panel and circular progress bar primarily design
     *   **Text Color**: Set the color for the title and percentage text.
         
 *   **Reset Progress**: Resets the progress to the minimum (0).
-    
-
-### 🔄 Live Updates
-
-All changes in control.html are sent to progress.html via WebSocket and applied instantly.
 
 🐛 Troubleshooting
 ------------------
