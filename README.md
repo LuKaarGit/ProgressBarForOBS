@@ -24,9 +24,10 @@ This project provides a real-time control panel for a circular progress bar, upd
 
 1. **Clone or Download** the repository.
 3. **Install necessary Node.js packages** (if setting up a WebSocket server locally).
-4. **Open control.html** in a browser to access the control panel.
-5. **Open progress.html** in a separate browser window or tab to view the progress bar.
-6. **Add progress.html location to OBS** as a browser source. Use the File Location as the "URL" (DO NOT ENABLE "LOCAL FILE" CHECKBOX).
+4. **Start the Websocket server** by running the included start.bat file, or running "node server.js"
+5. **Open control.html** in a browser to access the control panel.
+6. **Open progress.html** in a separate browser window or tab to view the progress bar.
+7. **Add progress.html location to OBS** as a browser source. Use the File Location as the "URL" (DO NOT ENABLE "LOCAL FILE" CHECKBOX).
 
 > **Important**: The WebSocket server must be running and accessible at ws://localhost:3000 for the app to function.
 
